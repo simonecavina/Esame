@@ -2,12 +2,7 @@ package it.university;
 
 import it.university.model.*;
 import it.university.service.*;
-
-
-//BRUTTO ANATROCCOLO
-
-//EGLKSSLMGSLGJ
-// sono sarahhhhhh
+import java.util.Scanner;
 
 public class MainApp {
     public static void main(String[] args) {
@@ -18,6 +13,15 @@ public class MainApp {
         EnrollmentService enrollmentService = new EnrollmentService();
         GradeService gradeService = new GradeService();
         
+//IMPLEMENTAZIONE MENU
+
+/*Idea: Far scegliere all'utente prima la macrocategoria (studente, prof, class ecc) e poi suddividere il menu in altre
+microcategorie come aggiungere studente, cercare studente, eliminare ecc)
+*/
+
+    System.out.println("MENU GESTIONE UNIVERSITÀ \n\n SCEGLIERE LA MACROCATEGORIA:\n");
+
+
         System.out.println("Studenti:");
         studentService.list().forEach(System.out::println);
 
