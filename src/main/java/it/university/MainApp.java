@@ -6,6 +6,8 @@ import it.university.service.*;
 
 //BRUTTO ANATROCCOLO
 
+//EGLKSSLMGSLGJ
+
 public class MainApp {
     public static void main(String[] args) {
         StudentService studentService = new StudentService();
