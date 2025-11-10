@@ -1,4 +1,4 @@
-package it.university.service;
+package it.university.gestione_menu;
 
 import java.util.Scanner;
 
@@ -6,24 +6,19 @@ public class Menu {
 
     private static void simulaCaricamento(String messaggio) {
         System.out.print("\n" + messaggio + " ");
-        int durata = 20; // Lunghezza della barra
+        int durata = 20; 
         
         for (int i = 0; i < durata; i++) {
             System.out.print("#");
             try {
-                // Pausa di 50 millisecondi per blocco, totale 1 secondo di attesa
                 Thread.sleep(50); 
             } catch (InterruptedException e) {
-                // Gestione dell'interruzione del thread
                 Thread.currentThread().interrupt();
             }
         }
         System.out.println(" Completato.");
     }
-    
-    // ---------------------------------------------
-    // 2. METODI DI VISUALIZZAZIONE DEI MENU
-    // ---------------------------------------------
+
 
     private static void mostraMenu() {
         System.out.println("\n--- MENU PRINCIPALE ---");
@@ -33,8 +28,6 @@ public class Menu {
         System.out.println("0. Esci dal programma");
         System.out.println("----------------------");
     }
-    // ... (omessi mostraMenuAule, mostraMenuProfessori, mostraMenuStudenti per brevità, 
-    // ma devono essere inclusi qui)
 
     private static void mostraMenuAule() {
         System.out.println("\n--- MENU AULE ---");
@@ -84,7 +77,42 @@ public class Menu {
                     case 1: 
                         simulaCaricamento("Esecuzione Logica: Iscrizione...");
                         System.out.println("-> Logica: Iscrizione completata."); 
-                        break;
+                        System.out.println("--- Inserimento Dati Studente ---");
+                     System.out.println("Inserisci Nome: ");
+                    String nome = scanner.nextLine();
+        
+                    System.out.println("Inserisci Cognome: ");
+                    String cognome = scanner.nextLine();
+        
+                    System.out.println("Inserisci Codice Fiscale: ");
+                    String cf = scanner.nextLine();
+        
+                    System.out.println("Inserisci Email: ");
+                    String email = scanner.nextLine();
+        
+      
+                    Iscrizione_studente studente = null;
+                    String codiceTest = "";
+        
+                    while (studente == null) {
+                    System.out.print("Inserisci Codice Test di Ammissione (7 numeri): ");
+                    codiceTest = scanner.nextLine();
+            
+                    try {
+                    studente = new Iscrizione_studente(nome, cognome, cf, email, codiceTest);
+                    System.out.println("\n✅ Iscrizione avvenuta con successo!");
+                    } catch (IllegalArgumentException e) {
+                    System.err.println(e.getMessage());
+                    System.out.println("Riprova ad inserire il codice del test.");
+            }
+        }
+        
+     
+                    System.out.println("\n--- Riepilogo ---");
+                    System.out.println(studente);
+
+                    scanner.close();
+
                     case 2: 
                         simulaCaricamento("Esecuzione Logica: Carriera...");
                         System.out.println("-> Logica: Carriera visualizzata."); 
@@ -110,6 +138,7 @@ public class Menu {
             }
         }
     }
+
 
     private static void gestioneSottomenuProfessori(Scanner scanner) {
         int sceltaSottomenu;
@@ -182,9 +211,6 @@ public class Menu {
         }
     }
 
-    // ---------------------------------------------
-    // 4. METODO MAIN (Punto di ingresso con Caricamento)
-    // ---------------------------------------------
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
