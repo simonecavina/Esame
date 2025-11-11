@@ -2,15 +2,10 @@ package it.university;
 
 import it.university.model.*;
 import it.university.service.*;
+import it.university.gestione_menu.*;
 import java.util.Scanner;
 
 
-
-//oufbipufhsdkudiucsdbicub
-
-
-//PROVA FILIPPO
-//TUa mammakjfbiedbuwl
 public class MainApp {
     public static void main(String[] args) {
         StudentService studentService = new StudentService();
@@ -19,6 +14,7 @@ public class MainApp {
         ClassroomService classroomService = new ClassroomService();
         EnrollmentService enrollmentService = new EnrollmentService();
         GradeService gradeService = new GradeService();
+        Menu menu = new Menu(studentService);
         
 //IMPLEMENTAZIONE MENU
 
@@ -27,6 +23,7 @@ microcategorie come aggiungere studente, cercare studente, eliminare ecc)
 */
 
     System.out.println("MENU GESTIONE UNIVERSITÀ \n\n SCEGLIERE LA MACROCATEGORIA:\n");
+        menu.eseguiMenuPrincipale();
 
 
         System.out.println("Studenti:");
