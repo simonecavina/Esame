@@ -2,14 +2,21 @@ package it.university.gestione_menu;
 
 import java.util.Scanner;
 
+import it.university.model.Professor;
 import it.university.model.Student;
 import it.university.service.*;
 public class Menu {
     private int contatoreStudenti = 0;
+    private int contatoreProfessori =0;
     private StudentService studentService;
+    private ProfessorService professorService;
 
     public Menu(StudentService studentService) {
         this.studentService = studentService;
+    }
+
+    public Menu(ProfessorService professorService){
+       this.professorService =professorService;
     }
 
     private static void simulaCaricamento(String messaggio) {
@@ -151,9 +158,21 @@ public class Menu {
                 
                 switch (sceltaSottomenu) {
                     case 1: 
-                    simulaCaricamento("Esecuzione Logica: Prossime lezioni...");
-                    System.out.println("-> Logica: Lezioni visualizzate."); 
-                    break;
+                        simulaCaricamento("Esecuzione Logica: Agguingi Professore...");
+                        System.out.println("--- Inserimento---");
+                        System.out.println("Inserisci Nome: ");
+                        String nome = scanner.nextLine();
+                        System.out.println("Inserisci Dipartimento: ");
+                        String department = scanner.nextLine();
+                        
+                        
+
+                        //generazione id automatico
+                        this.contatoreProfessori++;
+                        int idProfessore = this.contatoreProfessori;
+                        professorService.registerProfessor(new Professor(idProfessore, nome, department));
+                         System.out.println("-> Logica: Professore Aguinto:" + idProfessore +" " + nome + " " + department);
+                         
                     case 2: 
                     simulaCaricamento("Esecuzione Logica: Cerca professore...");
                     System.out.println("-> Logica: Ricerca completata."); 
@@ -209,51 +228,7 @@ public class Menu {
         }
     }
     
-    
-    /*public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int scelta;
-        
-        mostraMenu();
-        
-        while (true) { 
-            System.out.print("\n[PRINCIPALE] Inserisci la tua scelta (0 per uscire): ");
-            
-            if (scanner.hasNextInt()) {
-                scelta = scanner.nextInt();
-                scanner.nextLine(); 
-                
-                switch (scelta) {
-                    case 1:
-                    simulaCaricamento("Caricamento Sottomenu Studenti...");
-                    gestioneSottomenuStudenti(scanner);
-                    mostraMenu(); 
-                    break;
-                    case 2:
-                    simulaCaricamento("Caricamento Sottomenu Professori...");
-                    gestioneSottomenuProfessori(scanner);
-                    mostraMenu(); 
-                        break;
-                        case 3:
-                        simulaCaricamento("Caricamento Sottomenu Aule...");
-                        gestioneSottomenuAule(scanner);
-                        mostraMenu(); 
-                        break;
-                        case 0:
-                        System.out.println("\nUscita dal programma. Arrivederci!");
-                        scanner.close();
-                        return; 
-                        default:
-                        System.out.println("Opzione non riconosciuta. Per favore, inserisci un numero tra 0 e 3.");
-                    }
-                    
-                } else {
-                    System.out.println("ERRORE: L'input non è un numero intero. Per favore, riprova.");
-                    scanner.nextLine(); 
-                    mostraMenu();
-                }
-            } 
-        }*/
+
 
         public void eseguiMenuPrincipale() {
             Scanner scanner = new Scanner(System.in);
