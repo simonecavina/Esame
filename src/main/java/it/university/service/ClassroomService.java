@@ -14,4 +14,10 @@ public class ClassroomService {
         }
         return repo.findAll(); 
     }
+    public Classroom findByCode(String code) {
+        return repo.findAll().stream()
+            .filter(classroom -> classroom.getCode().equals(code))
+            .findFirst()
+            .orElse(null);
+    }
 }

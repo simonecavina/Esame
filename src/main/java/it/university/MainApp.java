@@ -3,7 +3,6 @@ package it.university;
 import it.university.model.*;
 import it.university.service.*;
 import it.university.gestione_menu.*;
-import java.util.Scanner;
 
 
 public class MainApp {
@@ -12,77 +11,37 @@ public class MainApp {
         ProfessorService professorService = new ProfessorService();
         CourseService courseService = new CourseService();
         ClassroomService classroomService = new ClassroomService();
-        EnrollmentService enrollmentService = new EnrollmentService();
-        GradeService gradeService = new GradeService();
-        Menu menu = new Menu(studentService);
+        GradeService gradeService = new GradeService(studentService, courseService);
         
-//IMPLEMENTAZIONE MENU
-
-/*Idea: Far scegliere all'utente prima la macrocategoria (studente, prof, class ecc) e poi suddividere il menu in altre
-microcategorie come aggiungere studente, cercare studente, eliminare ecc)
-*/
+        // Inizializzazione dati di default
+        studentService.registerStudent(new Student(1, "Alice", "alice@mail.com"));
+        studentService.registerStudent(new Student(2, "Bob", "bob@mail.com"));
+        
+        professorService.add(new Professor(1, "Dr. Rossi", "Informatica"));
+        
+        courseService.createCourse(new Course(1, "Programmazione", 9));
+        courseService.createCourse(new Course(2, "Basi di Dati", 6));
+        courseService.assignProfessor(courseService.list().get(0), 1);
+        
+        classroomService.add(new Classroom("A101", 30));
+        
+        Menu menu = new Menu(studentService, courseService, professorService, gradeService, classroomService);
+        
 
     System.out.println("MENU GESTIONE UNIVERSITÀ \n\n SCEGLIERE LA MACROCATEGORIA:\n");
         menu.eseguiMenuPrincipale();
 
 
-        System.out.println("Studenti:");
+        System.out.println("Studenti finali:");
         studentService.list().forEach(System.out::println);
 
-        studentService.registerStudent(new Student(1, "Alice", "alice@mail.com"));
-        studentService.registerStudent(new Student(2, "Bob", "bob@mail.com"));
-        
-        System.out.println("Studenti:");
-        studentService.list().forEach(System.out::println);
-
-        System.out.println("\nProfessori:");
+        System.out.println("\nProfessori finali:");
         professorService.list().forEach(System.out::println);
 
-        professorService.add(new Professor(1, "Dr. Rossi", "Informatica"));
-        System.out.println("\nProfessori:");
-        professorService.list().forEach(System.out::println);
-
-
-        System.out.println("\nCorsi:");
+        System.out.println("\nCorsi finali:");
         courseService.list().forEach(System.out::println);
 
-        courseService.createCourse(new Course(1, "Programmazione", 9));
-        courseService.createCourse(new Course(2, "Basi di Dati", 6));
-        courseService.assignProfessor(courseService.list().get(0), 1);
-
-        System.out.println("\nCorsi:");
-        courseService.list().forEach(System.out::println);
-
-        System.out.println("\nAule:");
+        System.out.println("\nAule finali:");
         classroomService.list().forEach(System.out::println);
-
-
-        classroomService.add(new Classroom("A101", 30));
-
-        System.out.println("\nAule:");
-        classroomService.list().forEach(System.out::println);
-
-        System.out.println("\nIscrizioni:");
-        enrollmentService.list().forEach(System.out::println);
-
-        enrollmentService.enrollStudent(new Enrollment(1,1));
-        enrollmentService.enrollStudent(new Enrollment(2,1));
-
-        System.out.println("\nIscrizioni:");
-        enrollmentService.list().forEach(System.out::println);
-
-
-
-        System.out.println("\nVoti:");
-        gradeService.list().forEach(System.out::println);
-
-        gradeService.add(new Grade(1,1,28));
-
-        System.out.println("\nVoti:");
-        gradeService.list().forEach(System.out::println);
-
-
-        
-
     }
 }
