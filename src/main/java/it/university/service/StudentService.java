@@ -14,4 +14,7 @@ public class StudentService {
         }
         return repository.findAll(); 
     }
+    public Student findById(int idRicerca) {
+        return repository.findById(idRicerca);
+    }
 }

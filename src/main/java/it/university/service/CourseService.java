@@ -9,6 +9,7 @@ public class CourseService {
 
     public void createCourse(Course c) { repo.save(c); }
     public void assignProfessor(Course c, int professorId) { c.setProfessorId(professorId); }
+    public Course findById(int id) { return repo.findById(id); }
     public List<Course> list() { 
         if (repo.findAll().isEmpty()){
             System.out.println("Nessun corso trovato");

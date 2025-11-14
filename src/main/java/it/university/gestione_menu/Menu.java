@@ -4,12 +4,14 @@ import java.util.Scanner;
 
 import it.university.model.Professor;
 import it.university.model.Student;
+import it.university.model.Course;
 import it.university.service.*;
 public class Menu {
-    private int contatoreStudenti = 0;
+    private int contatoreStudenti = 1500;
     private int contatoreProfessori =0;
     private StudentService studentService;
     private ProfessorService professorService;
+    private CourseService courseService;
 
     public Menu(StudentService studentService) {
         this.studentService = studentService;
@@ -17,6 +19,11 @@ public class Menu {
 
     public Menu(ProfessorService professorService){
        this.professorService =professorService;
+    }
+
+    public Menu(StudentService studentService, CourseService courseService) {
+        this.studentService = studentService;
+        this.courseService = courseService;
     }
 
     private static void simulaCaricamento(String messaggio) {
@@ -82,9 +89,12 @@ public class Menu {
         System.out.println("--------------------------");
     }
 
-    // ---------------------------------------------
-    // 3. METODI DI GESTIONE DEI SOTTOMENU (con Caricamento)
-    // ---------------------------------------------
+    //Boolean per controllare se la mail dello studente contiene @
+
+    private static boolean isValidEmail(String email) {
+        return email.contains("@");
+    }
+
 
     private void gestioneSottomenuStudenti(Scanner scanner) {
         int sceltaSottomenu;
@@ -104,9 +114,17 @@ public class Menu {
                         System.out.println("Inserisci Nome: ");
                         String nome = scanner.nextLine();
                         
-                        System.out.println("Inserisci Email: ");
-                        String email = scanner.nextLine();
-                        
+                        String email = "";
+                        boolean emailValida = false;
+                        while (!emailValida) {
+                            System.out.println("Inserisci Email: ");
+                            email = scanner.nextLine();
+                            if (isValidEmail(email)) {
+                                emailValida = true;
+                            } else {
+                                System.out.println("Email non valida! \n\n\nRiprova.");
+                            }
+                        }
 
                         //generazione id automatico
                         this.contatoreStudenti++;
@@ -115,22 +133,53 @@ public class Menu {
 
                     
                         System.out.println("-> Logica: Studente Iscritto:" + idStudente +" " + nome + " " + email); 
+                        break;
                     
                     case 2: 
-                    simulaCaricamento("Esecuzione Logica: Carriera...");
-                        System.out.println("-> Logica: Carriera visualizzata."); 
+                    simulaCaricamento("Esecuzione Logica: Ricerca studente...");
+                        System.out.println("Inserire ID Studente:");
+                        int idRicerca = scanner.nextInt();
+                        scanner.nextLine();
+                        Student studenteTrovato = studentService.findById(idRicerca);
+                        if (studenteTrovato != null) {
+                            System.out.println("\n\nStudente trovato: " + studenteTrovato);
+                        } else {
+                            System.out.println("\n\nStudente con ID " + idRicerca + " non trovato.");
+                        }
                         break;
-
                         case 3: 
-                        simulaCaricamento("Esecuzione Logica: Voti...");
-                        System.out.println("-> Logica: Stampa Studenti"); 
+                        simulaCaricamento("Esecuzione Logica: Stampa lista studenti...");
+                        System.out.println("\n\n");
                         studentService.list().forEach(System.out::println);
+                        break;
 
                         case 4: 
-                        simulaCaricamento("Esecuzione Logica: Rinuncia agli studi...");
-                        System.out.println("-> Logica: Rinuncia processata."); 
-                        break;
-                        case 0:
+                        simulaCaricamento("Esecuzione Logica: Assegna corso...");
+                        System.out.println("Inserire ID Studente per l'assegnazione del corso:");
+                        int idStudenteAssegna = scanner.nextInt();
+                        scanner.nextLine();
+
+                        
+                        Student studToAssign = studentService.findById(idStudenteAssegna);
+                        if (studToAssign == null) {
+                            System.out.println("ID non trovato, perfavore inserirne uno valido");
+                            break;
+                        }
+                        System.out.println("Inserire ID Corso da assegnare:");
+                        int idCorsoAssegna = scanner.nextInt();
+                        scanner.nextLine();
+                        
+                        Course corsoAssegnato = courseService.findById(idCorsoAssegna);
+                        if (corsoAssegnato != null) {
+                            System.out.println("Corso assegnato a Studente " + idStudenteAssegna + ":");
+                            System.out.println("  - ID: " + corsoAssegnato.getId());
+                            System.out.println("  - Nome: " + corsoAssegnato.getName());
+                            System.out.println("  - CFU: " + corsoAssegnato.getCredits());
+                            System.out.println("  - Professore ID: " + (corsoAssegnato.getProfessorId() != null ? corsoAssegnato.getProfessorId() : "Non assegnato"));
+                        } else {
+                            System.out.println("Corso con ID " + idCorsoAssegna + " non trovato.");
+                        }
+                        break;                        case 0:
                         System.out.println("Torno al menu principale.");
                         return;
                         default:
@@ -157,7 +206,7 @@ public class Menu {
                 scanner.nextLine(); 
                 
                 switch (sceltaSottomenu) {
-                    case 1: 
+                  /*   case 1: 
                         simulaCaricamento("Esecuzione Logica: Agguingi Professore...");
                         System.out.println("--- Inserimento---");
                         System.out.println("Inserisci Nome: ");
@@ -172,7 +221,7 @@ public class Menu {
                         int idProfessore = this.contatoreProfessori;
                         professorService.registerProfessor(new Professor(idProfessore, nome, department));
                          System.out.println("-> Logica: Professore Aguinto:" + idProfessore +" " + nome + " " + department);
-                         
+                          */
                     case 2: 
                     simulaCaricamento("Esecuzione Logica: Cerca professore...");
                     System.out.println("-> Logica: Ricerca completata."); 
