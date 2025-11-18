@@ -15,19 +15,6 @@ public class Iscrizione_studente {
         this.CodiceTestDiAmmissione = codiceTestDiAmmissione;
     }
 
-    private boolean validaCodiceTest(String codice) {
-        if (codice == null || codice.length() != 7) {
-            return false;
-        }
-        try{
-            Long.parseLong(codice);
-            return true;
-        }
-        catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
     public String getNome(){
         return Nome;
     }
