@@ -4,7 +4,7 @@ import it.university.model.Course;
 import it.university.repository.CourseRepository;
 import java.util.List;
 
-public class CourseService {
+public class CourseService{
     private CourseRepository repo = new CourseRepository();
 
     public void createCourse(Course c) { repo.save(c); }

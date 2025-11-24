@@ -1,12 +1,22 @@
 package it.university.repository;
 
+import it.university.Interfaces.ICourseRepository;
 import it.university.model.Course;
 import java.util.*;
 
-public class CourseRepository {
+public class CourseRepository implements ICourseRepository{
     private Map<Integer, Course> data = new HashMap<>();
 
-    public void save(Course c) { data.put(c.getId(), c); }
-    public Course findById(int id) { return data.get(id); }
-    public List<Course> findAll() { return new ArrayList<>(data.values()); }
+    @Override
+    public void save(Course c) {
+        data.put(c.getId(), c);
+    }
+    @Override
+    public Course findById(Integer id) {
+        return data.get(id);
+    }
+    @Override
+    public List<Course> findAll() {
+        return new ArrayList<>(data.values());
+    }
 }
