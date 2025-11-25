@@ -1,9 +1,10 @@
 package it.university.repository;
 
+
 import it.university.model.Enrollment;
 import java.util.*;
 
-public class EnrollmentRepository {
+public class EnrollmentRepository{
     private List<Enrollment> enrollments = new ArrayList<>();
 
     public void save(Enrollment e) { enrollments.add(e); }
