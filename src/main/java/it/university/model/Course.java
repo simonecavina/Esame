@@ -18,8 +18,6 @@ public class Course {
     public Integer getProfessorId() { return professorId; }
     public void setProfessorId(Integer professorId) { this.professorId = professorId; }
 
-    
-
     @Override
     public String toString() {
         return "Course{" + id + ", " + name + ", " + credits + " CFU, prof=" + professorId + "}";

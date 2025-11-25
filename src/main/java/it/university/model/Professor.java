@@ -1,22 +1,24 @@
 package it.university.model;
 
-public class Professor {
+public class Professor extends UtenteUniversitario{
     private int id;
-    private String name;
     private String department;
 
     public Professor(int id, String name, String department) {
+        super(name);
         this.id = id;
-        this.name = name;
         this.department = department;
     }
 
-    public int getId() { return id; }
-    public String getName() { return name; }
-    public String getDepartment() { return department; }
+    public int getId() {
+        return id;
+    }
+    public String getDepartment() {
+        return department;
+    }
 
     @Override
     public String toString() {
-        return "Professor{" + id + ", " + name + ", dept=" + department + "}";
+        return "Professor{" + id + ", " + getName() + ", dept=" + department + "}";
     }
 }
