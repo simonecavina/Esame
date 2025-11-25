@@ -1,5 +1,6 @@
 package it.university.repository;
 
+import it.university.Exceptions.RisorsaNonTrovata;
 import it.university.Interfaces.ICourseRepository;
 import it.university.model.Course;
 import java.util.*;
@@ -13,7 +14,11 @@ public class CourseRepository implements ICourseRepository{
     }
     @Override
     public Course findById(Integer id) {
-        return data.get(id);
+        Course corso = data.get(id);
+        if (corso == null){
+            throw new RisorsaNonTrovata("Corso con ID " + id + " non trovato.");
+        }
+        return corso;
     }
     @Override
     public List<Course> findAll() {

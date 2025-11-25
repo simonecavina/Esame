@@ -1,22 +1,23 @@
 package it.university.model;
 
-public class Student {
+public class Student extends UtenteUniversitario {
     private int id;
-    private String name;
     private String email;
 
     public Student(int id, String name, String email) {
+        super(name);
         this.id = id;
-        this.name = name;
         this.email = email;
     }
 
-    public int getId() { return id; }
-    public String getName() { return name; }
+    @Override
+    public int getId() {
+        return id;
+    }
     public String getEmail() { return email; }
 
     @Override
     public String toString() {
-        return "" + id + " - " + name + " - " + email + "";
+        return "" + id + " - " + getName() + " - " + email + "";
     }
 }

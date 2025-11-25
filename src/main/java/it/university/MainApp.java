@@ -1,7 +1,9 @@
 package it.university;
 
 import it.university.model.*;
+//import it.university.repository.ProfessorRepository;
 import it.university.service.*;
+//import it.university.Interfaces.IProfessorRepository;
 import it.university.gestione_menu.*;
 
 
@@ -21,7 +23,7 @@ public class MainApp {
         
         courseService.createCourse(new Course(1, "Programmazione", 9));
         courseService.createCourse(new Course(2, "Basi di Dati", 6));
-        courseService.assignProfessor(courseService.list().get(0), 1);
+        courseService.assignProfessor(1, 1,professorService.getRepository());
         
         classroomService.add(new Classroom("A101", 30));
         

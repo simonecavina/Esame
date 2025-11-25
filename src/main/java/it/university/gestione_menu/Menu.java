@@ -2,9 +2,11 @@ package it.university.gestione_menu;
 
 import java.util.Scanner;
 
+
 import it.university.model.Professor;
 import it.university.model.Student;
 import it.university.model.Course;
+import it.university.Exceptions.RisorsaNonTrovata;
 import it.university.model.Classroom;
 import it.university.service.*;
 public class Menu {
@@ -91,8 +93,8 @@ public class Menu {
         System.out.println("1.  - ISCRIZIONE");
         System.out.println("2.  - CERCA STUDENTE");
         System.out.println("3.  - STAMPA LISTA STUDENTI");
-        System.out.println("4.  - ASSEGNA CORSO");
-        System.out.println("5.  - VISUALIZZA VOTI");
+        System.out.println("4.  - VISUALIZZA VOTI");
+        System.out.println("5.  - ASSEGNA CORSO");
         System.out.println("0.  - Torna al menu principale");
         System.out.println("--------------------------");
     }
@@ -102,7 +104,6 @@ public class Menu {
     private static boolean isValidEmail(String email) {
         return email.contains("@");
     }
-
 
     private void gestioneSottomenuStudenti() {
         mostraMenuStudenti();
@@ -117,8 +118,8 @@ public class Menu {
                 System.out.println("ERRORE: L'input non è un numero intero. Per favore, riprova.");
                 continue;
             }
-                
                 switch (sceltaSottomenuStudenti) {
+                    //CASO CREAZIONE DI UN NUOVO OGGETTO STUDENTE
                     case 1: 
                         simulaCaricamento("Esecuzione Logica: Iscrizione...");
                         System.out.println("--- Inserimento Dati Studente ---");
@@ -142,78 +143,74 @@ public class Menu {
                         int idStudente = this.contatoreStudenti;
                         studentService.registerStudent(new Student(idStudente, nome, email));
 
-                    
                         System.out.println("+-----------------------------+");
                         System.out.println("|   Studente aggiunto con successo!   |");
                         System.out.println("+-----------------------------+");
                         System.out.println("Studente Iscritto:" + idStudente +" " + nome + " " + email); 
                         break;
                     
+                    //CASO RICERCA STUDENTE PER ID, VIENE GESTITO CON LE ECCEZZIONI IN CASO VENGA INSERITO UN ID NON VALIDO O UN ID NON ESISTENTE (RisorsaNonTrovata.Java)
                     case 2: 
                         simulaCaricamento("Esecuzione Logica: Ricerca studente...");
-                        System.out.println("Inserire ID Studente:");
-                        String idRicercaStr = scanner.nextLine();
-                        int idRicercaStud = -1;
                         try{
-                            idRicercaStud = Integer.parseInt(idRicercaStr);
-                        } catch (NumberFormatException e){
-                            System.out.println("ERRORE: L'input non è un numero intero. Per favore, riprova.");
-                            break;
+                            System.out.println("Inserire ID Studente:");
+                            int idRicercaStr = scanner.nextInt();
+                            scanner.nextLine();
+                            Student studenteTrovato = studentService.findById(idRicercaStr);
+                            System.out.println("Studente trovato: "+ studenteTrovato.getName()+ " Mail studente: "+ studenteTrovato.getEmail());
+                        } catch(IllegalArgumentException e){
+                            System.err.println("Errore di Input: "+ e.getMessage());
+                        } catch(RisorsaNonTrovata e){
+                            System.err.println("Errore Risorsa: " + e.getMessage());
+                        } catch (Exception e){
+                            System.err.println("Errore Generico: "+ e.getMessage());
                         }
-                        
-                        Student studenteTrovato = studentService.findById(idRicercaStud);
-                        if (studenteTrovato != null) {
-                            System.out.println("\n\nStudente trovato: " + studenteTrovato);
-                        } else {
-                            System.out.println("\n\nStudente con ID " + idRicercaStud + " non trovato.");
-                        }
-                        
                         break;
+                    //CASO STAMPA TUTTA LA LISTA DEGLI STUDENTI 
+                    case 3: 
+                        simulaCaricamento("Esecuzione Logica: Stampa lista studenti...");
+                        System.out.println("\n\n");
+                        studentService.list().forEach(System.out::println);
+                        break;
+                    //DA GESTIRE CON ECCEZIONI
+                    case 4: 
+                        simulaCaricamento("Esecuzione Logica: Assegna corso...");
+                        System.out.println("Inserire ID Studente per l'assegnazione del corso:");
 
-                        case 3: 
-                            simulaCaricamento("Esecuzione Logica: Stampa lista studenti...");
-                            System.out.println("\n\n");
-                            studentService.list().forEach(System.out::println);
+                        int idStudenteAssegna = scanner.nextInt();
+                        scanner.nextLine();
+
+                        
+                        Student studToAssign = studentService.findById(idStudenteAssegna);
+                        if (studToAssign == null) {
+                            System.out.println("ID non trovato, perfavore inserirne uno valido");
                             break;
-                        
-                        // case 4: 
-                        // simulaCaricamento("Esecuzione Logica: Assegna corso...");
-                        // System.out.println("Inserire ID Studente per l'assegnazione del corso:");
+                        }
+                        System.out.println("Elenco dei corsi disponibili:");
+                        courseService.list().forEach(corso -> {
+                        System.out.println("  - ID: " + corso.getId() + ", Nome: " + corso.getName());
+                        });
 
-                        // int idStudenteAssegna = scanner.nextInt();
-                        // scanner.nextLine();
-
+                        System.out.println("Inserire ID Corso da assegnare:");
+                        int idCorsoAssegna = scanner.nextInt();
+                        scanner.nextLine();
                         
-                        // Student studToAssign = studentService.findById(idStudenteAssegna);
-                        // if (studToAssign == null) {
-                        //     System.out.println("ID non trovato, perfavore inserirne uno valido");
-                        //     break;
-                        // }
-                        // System.out.println("Elenco dei corsi disponibili:");
-                        // courseService.list().forEach(corso -> {
-                        //     System.out.println("  - ID: " + corso.getId() + ", Nome: " + corso.getName());
-                        // });
-
-                        // System.out.println("Inserire ID Corso da assegnare:");
-                        // int idCorsoAssegna = scanner.nextInt();
-                        // scanner.nextLine();
-                        
-                        // Course corsoAssegnato = courseService.findById(idCorsoAssegna);
-                        // if (corsoAssegnato != null) {
-                        //     System.out.println("Corso assegnato a Studente " + idStudenteAssegna + ":");
-                        //     System.out.println("  - ID: " + corsoAssegnato.getId());
-                        //     System.out.println("  - Nome: " + corsoAssegnato.getName());
-                        //     System.out.println("  - CFU: " + corsoAssegnato.getCredits());
-                        //     System.out.println("  - Professore ID: " + (corsoAssegnato.getProfessorId() != null ? corsoAssegnato.getProfessorId() : "Non assegnato"));
-                        // } else {
-                        //     System.out.println("Corso con ID " + idCorsoAssegna + " non trovato.");
-                        // }
-                        // break; 
-                        case 0:
-                            System.out.println("Torno al menu principale.");
-                            return;
-                        default:
-                            System.out.println("Opzione non riconosciuta (1-4, 0).");
+                        Course corsoAssegnato = courseService.findById(idCorsoAssegna);
+                        if (corsoAssegnato != null) {
+                            System.out.println("Corso assegnato a Studente " + idStudenteAssegna + ":");
+                            System.out.println("  - ID: " + corsoAssegnato.getId());
+                            System.out.println("  - Nome: " + corsoAssegnato.getName());
+                            System.out.println("  - CFU: " + corsoAssegnato.getCredits());
+                            System.out.println("  - Professore ID: " + (corsoAssegnato.getProfessorId() != null ? corsoAssegnato.getProfessorId() : "Non assegnato"));
+                        } else {
+                            System.out.println("Corso con ID " + idCorsoAssegna + " non trovato.");
+                        }
+                        break; 
+                    case 0:
+                        System.out.println("Torno al menu principale.");
+                        return;
+                    default:
+                        System.out.println("Opzione non riconosciuta (1-4, 0).");
                     }
                     if (sceltaSottomenuStudenti != 0) mostraMenuStudenti();    
         }
@@ -250,28 +247,27 @@ public class Menu {
                     System.out.println("+-------------------------------+");
                     System.out.println("Professore Aggiunto: " + idProfessore + " " + nome + " " + department);
                     break;
+
+                    //CASO RICERCA PROFESSORE PER ID, VIENE GESTITO CON LE ECCEZZIONI IN CASO VENGA INSERITO UN ID NON VALIDO O UN ID NON ESISTENTE (RisorsaNonTrovata.Java)
                     case 2: 
                     simulaCaricamento("Esecuzione Logica: Cerca professore...");
-                    System.out.println("Inserire ID Professore:");
-                    String idProfString = scanner.nextLine();
-                    int idProfInt = -1;
                     try{
-                        idProfInt = Integer.parseInt(idProfString);
-                    } catch (NumberFormatException e){
-                        System.out.println("ERRORE: L'input non è un numero intero. Per favore, riprova.");
-                        inputValido = false;
+                        System.out.println("Inserire ID Professore:");
+                        int idProf = scanner.nextInt();
+                        scanner.nextLine();
+                        Professor professoreTrovato = professorService.findById(idProf);
+                        System.out.println("Professore trovato: "+ professoreTrovato.getName());
+                    }catch (RisorsaNonTrovata e){
+                        System.out.println("Errore Risorsa: "+ e.getMessage());
                         break;
-                    }
-                    if (inputValido){
-                        Professor professoreTrovato = professorService.findById(idProfInt);
-                        if (professoreTrovato != null) {
-                            System.out.println("\n\nProfessore trovato: " + professoreTrovato);
-                        } else {
-                            System.out.println("\n\nProfessore con ID " + idProfInt + " non trovato.");
-                        }   
-                    }
+                    }catch(IllegalArgumentException e){
+                            System.err.println("Errore di Input: "+ e.getMessage());
+                    }catch (Exception e){
+                            System.err.println("Errore Generico: "+ e.getMessage());
+                        }
                     break;
 
+                    //DA SISTEMARE CON GESTIONE DELLE ECCEZIONI
                     case 3: 
                     inputValido = true;
                     simulaCaricamento("Esecuzione Logica: Inserisci voto...");
@@ -334,7 +330,6 @@ public class Menu {
                         } else {
                             System.out.println("Inserimento voto annullato.");
                         }  
-
                     }
                     break;
 
@@ -397,7 +392,7 @@ public class Menu {
                     System.out.println("+-------------------------------+");
                     System.out.println("\n\nAula creata: " + codiceAula + " con capacità di " + capacitaAulaInt + " posti.");
                 }
-                
+                //CASO STAMPA TUTTE LE AULE
                 case 2:
                 simulaCaricamento("Visualizza Aule...");
                 System.out.println("\n\n");
@@ -427,6 +422,7 @@ public class Menu {
             }
                 
             switch (sceltaSottomenu) {
+                //CASO CREAZIONE DI UN NUOVO CORSO
                 case 1:
                     simulaCaricamento("Esecuzione Logica: Crea nuovo corso...");
                     System.out.println("Inserisci Nome Corso: ");
@@ -448,54 +444,28 @@ public class Menu {
                         System.out.println("ERRORE: L'input non è un numero intero. Per favore, riprova.");
                         break;
                     }
-                    
+
+                //CASO DI ASSEGNA CORSO A PROFESSORE CON GESTIONE DELLE ECCEZIONI   
                 case 2:
                     simulaCaricamento("Esecuzione Logica: Assegna professore al corso...");
-                    Course corsoDaAssegnare = null;
-
-                    System.out.println("Inserire ID Corso da assegnare:");
-                    String idCorsoString = scanner.nextLine();
-                    boolean inputValido = true;
                     try{
-                        int idCorsoAssegnaInt = Integer.parseInt(idCorsoString);
-                        corsoDaAssegnare = courseService.findById(idCorsoAssegnaInt);
-                        if (corsoDaAssegnare == null) {
-                            System.out.println("ID Corso non trovato, perfavore inserirne uno valido");
-                            inputValido = false;
-                        }
-                    }catch(NumberFormatException e){
-                        System.out.println("ERRORE: L'input non è un numero intero. Per favore, riprova.");
-                        inputValido = false;
-                    }
+                        System.out.println("Inserisci ID Corso:");
+                        int courseId = scanner.nextInt();
+                        scanner.nextLine();
+                        System.out.println("Inserisci ID Professore da assegnare:");
+                        int professorId = scanner.nextInt();
+                        scanner.nextLine();
 
-                    if (!inputValido){
-                        break;
-                    } 
-                        
-                    int idProfessoreAssegnaInt = -1;
-                    System.out.println("Inserire ID Professore da assegnare al corso:");
-                    String idProfessoreAssegnaString = scanner.nextLine();
-                    try{
-                        idProfessoreAssegnaInt = Integer.parseInt(idProfessoreAssegnaString);
-                        Professor professoreDaAssegnare = professorService.findById(idProfessoreAssegnaInt);
-                        if (professoreDaAssegnare == null) {
-                            System.out.println("ID Professore non trovato, perfavore inserirne uno valido");
-                            inputValido = false;
-                        }
-                        
-                    }catch (NumberFormatException e){
-                        System.out.println("ERRORE: L'input non è un numero intero. Per favore, riprova.");
-                        inputValido = false;
-                    }
-                    if (inputValido){
-                        courseService.assignProfessor(corsoDaAssegnare, idProfessoreAssegnaInt);
-                        System.out.println("+-------------------------------+");
-                        System.out.println("|       Professore assegnato con successo!       |");
-                        System.out.println("+-------------------------------+");
-                        System.out.println("Professore " + idProfessoreAssegnaInt + " assegnato al corso " + corsoDaAssegnare.getId());
+                        courseService.assignProfessor(courseId, professorId, professorService.getRepository());
+                        System.out.println("Professore con ID: "+ professorId +" assegnato al corso "+courseId+" con successo.");
+                    } catch (IllegalArgumentException e){
+                        System.err.println("Errore: "+ e.getMessage());
+                    }catch (RisorsaNonTrovata e){
+                        System.err.println("Errore: Risorsa non trovata "+ e.getMessage());
                     }
                     break;
-                
+
+                //CASO PER LA STAMPA COMPLETA DI TUTTI I CORSI
                 case 3:
                     simulaCaricamento("Esecuzione Logica: Lista corsi...");
                     System.out.println("\n\n");
