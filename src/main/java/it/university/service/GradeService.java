@@ -1,8 +1,7 @@
 package it.university.service;
 
-import it.university.model.Course;
+import it.university.Exceptions.RisorsaNonTrovata;
 import it.university.model.Grade;
-import it.university.model.Student;
 import it.university.repository.GradeRepository;
 import java.util.List;
 
@@ -24,18 +23,33 @@ public class GradeService {
         return repo.findAll(); 
     }
 
+    public void controlloVoto(int grade){
+        if (grade < 18 || grade > 30){
+            throw new IllegalArgumentException("Il Valore inserito deve essere un valore da 18 a 30");
+        }
+    }
+
     public void insertGrade(int idStudente, int idCorso, int valoreVoto) {
-        Course corso = courseService.findById(idCorso);
-        if (corso == null) {
-            System.out.println("Errore: Corso non trovato.");
-            return;
-        }
-        Student studente = studentService.findById(idStudente);
-        if (studente == null) {
-            System.out.println("Errore: Studente non trovato.");
-            return;
-        }
+        //AGGIUNTA A GESTIONE DELLE ECCEZZIONI PER L'INSERMENTO DI UN NUOVO VOO
+        try {
+            courseService.findById(idCorso);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Errore di Input: "+ e.getMessage());
+        } catch(RisorsaNonTrovata e){
+            System.err.println("Errore Risorsa: " + e.getMessage());
+        } catch (Exception e){
+            System.err.println("Errore Generico: "+ e.getMessage());
+        }   
+        try {
+            studentService.findById(idStudente);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Errore di Input: "+ e.getMessage());
+        } catch(RisorsaNonTrovata e){
+            System.err.println("Errore Risorsa: " + e.getMessage());
+        } catch (Exception e){
+            System.err.println("Errore Generico: "+ e.getMessage());
+        }   
         Grade grade = new Grade(idStudente, idCorso, valoreVoto);
         repo.save(grade);
-    }
+        }
 }
