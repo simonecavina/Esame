@@ -2,11 +2,11 @@ package it.university.service;
 
 import it.university.model.Professor;
 import it.university.repository.ProfessorRepository;
-import it.university.Interfaces.IProfessorRepository;
+import it.university.Interfaces.IProfessor;
 import java.util.List;
 
 public class ProfessorService {
-    private IProfessorRepository repository = new ProfessorRepository();
+    private IProfessor repository = new ProfessorRepository();
 
     public void add(Professor p) { repository.save(p); }
     public List<Professor> list() { 
@@ -15,7 +15,7 @@ public class ProfessorService {
         }
         return repository.findAll(); 
     }
-    public IProfessorRepository getRepository(){
+    public IProfessor getRepository(){
         return repository;
     }
     public Professor findById(int idRicerca) {

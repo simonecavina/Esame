@@ -14,7 +14,7 @@ public class MainApp {
         CourseService courseService = new CourseService();
         ClassroomService classroomService = new ClassroomService();
         GradeService gradeService = new GradeService(studentService, courseService);
-        
+        EnrollmentService enrollmentService = new EnrollmentService();
         // Inizializzazione dati di default
         studentService.registerStudent(new Student(1, "Alice", "alice@mail.com"));
         studentService.registerStudent(new Student(2, "Bob", "bob@mail.com"));
@@ -27,7 +27,7 @@ public class MainApp {
         
         classroomService.add(new Classroom("A101", 30));
         
-        Menu menu = new Menu(studentService, courseService, professorService, gradeService, classroomService);
+        Menu menu = new Menu(studentService, courseService, professorService, gradeService, classroomService, enrollmentService);
         
 
     System.out.println("MENU GESTIONE UNIVERSITÀ \n\n SCEGLIERE LA MACROCATEGORIA:\n");

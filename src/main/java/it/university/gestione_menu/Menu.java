@@ -6,6 +6,7 @@ import java.util.Scanner;
 import it.university.model.Professor;
 import it.university.model.Student;
 import it.university.model.Course;
+import it.university.model.Enrollment;
 import it.university.Exceptions.ErroreGenerico;
 import it.university.Exceptions.RisorsaNonTrovata;
 import it.university.model.Classroom;
@@ -20,6 +21,7 @@ public class Menu {
     private CourseService courseService;
     private GradeService gradeService;
     private ClassroomService classroomService;
+    private EnrollmentService enrollmentService;
 
     public Menu(StudentService studentService) {
         this.studentService = studentService;
@@ -29,12 +31,13 @@ public class Menu {
        this.professorService =professorService;
     }
 
-    public Menu(StudentService studentService, CourseService courseService, ProfessorService professorService, GradeService gradeService, ClassroomService classroomService) {
+    public Menu(StudentService studentService, CourseService courseService, ProfessorService professorService, GradeService gradeService, ClassroomService classroomService, EnrollmentService enrollmentService) {
         this.studentService = studentService;
         this.courseService = courseService;
         this.professorService = professorService;
         this.gradeService = gradeService;
         this.classroomService = classroomService;
+        this.enrollmentService = enrollmentService;
     }
 
     private static void simulaCaricamento(String messaggio) {
@@ -93,6 +96,7 @@ public class Menu {
         System.out.println("2.  - CERCA STUDENTE");
         System.out.println("3.  - STAMPA LISTA STUDENTI");
         System.out.println("4.  - ASSEGNA CORSO");
+        System.out.println("5.  - STAMPA CORSI ASSEGNATI AGLI STUDENTI");
         System.out.println("0.  - Torna al menu principale");
         System.out.println("--------------------------");
     }
@@ -196,6 +200,7 @@ public class Menu {
                             int idCorsoAssegna = scanner.nextInt();
                             scanner.nextLine();
                             Course corsoAssegnato = courseService.findById(idCorsoAssegna);
+                            enrollmentService.enrollStudent(new Enrollment(idAssegnato, idCorsoAssegna));
                             System.out.println("Corso assegnato a Studente " + idAssegnato + ":");
                             System.out.println("  - ID: " + corsoAssegnato.getId());
                             System.out.println("  - Nome: " + corsoAssegnato.getName());
@@ -209,12 +214,18 @@ public class Menu {
                             System.err.println("Errore Generico: "+ e.getMessage());
                         }
                         break;
-              
+                        
+                    //CASO IN CUI IL PROGRAMMA STAMPA TUTTA LA LISTA DEGLI STUDENTI ISCRITTI NEI VARI CORSI
+                    case 5:
+                        simulaCaricamento("Esecuzione Logica: Stampa lista corsi assegnati...");
+                        System.out.println("\n\n");
+                        enrollmentService.list().forEach(System.out::println);
+                        break;
                     case 0:
                         System.out.println("Torno al menu principale.");
                         return;
                     default:
-                        System.out.println("Opzione non riconosciuta (1-4, 0).");
+                        System.out.println("Opzione non riconosciuta (1-5, 0).");
                     }
                     if (sceltaSottomenuStudenti != 0) mostraMenuStudenti();
             } catch (NumberFormatException e) {

@@ -1,11 +1,11 @@
 package it.university.repository;
 
 import it.university.Exceptions.RisorsaNonTrovata;
-import it.university.Interfaces.ICourseRepository;
+import it.university.Interfaces.ICourse;
 import it.university.model.Course;
 import java.util.*;
 
-public class CourseRepository implements ICourseRepository{
+public class CourseRepository implements ICourse{
     private Map<Integer, Course> data = new HashMap<>();
 
     @Override
