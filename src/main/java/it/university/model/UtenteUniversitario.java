@@ -1,5 +1,7 @@
 package it.university.model;
 
+//ABBIAMO UTILIZZATO QUESTA CLASSE ASTRATTA PER POTER DEFINIE UN ATTRIBUTO COMUNE A DUE CLASSI DIVERSE QUALI STUDENTE E PROFESSORE
+
 public abstract class UtenteUniversitario {
     private String name;
 

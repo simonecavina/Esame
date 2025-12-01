@@ -2,17 +2,17 @@ package it.university.service;
 
 import it.university.model.Course;
 //import it.university.repository.ProfessorRepository;
-import it.university.Interfaces.ICourseRepository;
+import it.university.Interfaces.ICourse;
 import it.university.repository.CourseRepository;
-import it.university.Interfaces.IProfessorRepository;
+import it.university.Interfaces.IProfessor;
 import java.util.List;
 
 public class CourseService{
-    private ICourseRepository repo = new CourseRepository();
+    private ICourse repo = new CourseRepository();
 
     public void createCourse(Course c) { repo.save(c); }
     //PRIMA DI ASSEGNARE UN CORSO AD UN PROFESSORE CONTROLLO CHE ESISTANO GLI ID DELL'UNO E DELL'ALTRO
-    public void assignProfessor(int courseId, int professorId, IProfessorRepository professorRepo) {
+    public void assignProfessor(int courseId, int professorId, IProfessor professorRepo) {
         if (courseId <= 0 || professorId <= 0){
             throw new IllegalArgumentException("Gli ID che hai inserito (Professore e Corso) devono essere positivi.");
         }

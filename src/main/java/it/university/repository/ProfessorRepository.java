@@ -1,11 +1,11 @@
 package it.university.repository;
 
 import it.university.Exceptions.RisorsaNonTrovata;
-import it.university.Interfaces.IProfessorRepository;
+import it.university.Interfaces.IProfessor;
 import it.university.model.Professor;
 import java.util.*;
 
-public class ProfessorRepository implements IProfessorRepository {
+public class ProfessorRepository implements IProfessor {
     private Map<Integer, Professor> data = new HashMap<>();
 
     @Override
