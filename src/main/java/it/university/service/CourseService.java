@@ -7,15 +7,14 @@ import it.university.repository.CourseRepository;
 import it.university.Interfaces.IProfessor;
 import java.util.List;
 
-public class CourseService{
+public class CourseService extends ExceptionService{
     private ICourse repo = new CourseRepository();
 
     public void createCourse(Course c) { repo.save(c); }
     //PRIMA DI ASSEGNARE UN CORSO AD UN PROFESSORE CONTROLLO CHE ESISTANO GLI ID DELL'UNO E DELL'ALTRO
     public void assignProfessor(int courseId, int professorId, IProfessor professorRepo) {
-        if (courseId <= 0 || professorId <= 0){
-            throw new IllegalArgumentException("Gli ID che hai inserito (Professore e Corso) devono essere positivi.");
-        }
+        controlloId(professorId);
+        controlloId(courseId);
         
         //IN CASO NON ESISTESSERO IL PROGRAMMA NON CONTINUEREBBE MA VERREBBERO LANCIATE DELLE ECCEZIONI
         professorRepo.findById(professorId);

@@ -5,7 +5,7 @@ import it.university.repository.ProfessorRepository;
 import it.university.Interfaces.IProfessor;
 import java.util.List;
 
-public class ProfessorService {
+public class ProfessorService extends ExceptionService{
     private IProfessor repository = new ProfessorRepository();
 
     public void add(Professor p) { repository.save(p); }
@@ -19,9 +19,7 @@ public class ProfessorService {
         return repository;
     }
     public Professor findById(int idRicerca) {
-        if (idRicerca <= 0){
-            throw new IllegalArgumentException("L'Id inserito non è valido, DEVE ESSERE UN NUMERO POSITIVO");
-        }
+        controlloId(idRicerca);
         return repository.findById(idRicerca);
     }
 }
